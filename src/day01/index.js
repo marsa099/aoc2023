@@ -35,58 +35,59 @@ const part2 = (rawInput) => {
 
   let numbers = [];
 
-  // Starting character in numbers 1-10
-  const startingChars = ["o", "t", "t", "f", "f", "s", "s", "e", "n"];
-  const numbersAsLetters = [
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-  ];
+  const numbersAsLetters = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
 
   input.split("\n").map((line) => {
-    let lineNumber = "";
-    let possibleCharNumbers = []; // list with possible numbers of current line
-    line.split("").map((char) => {
-      if (/^\d/.test(char)) {
-        lineNumber = lineNumber + char;
-      } else {
-        possibleCharNumbers = possibleCharNumbers.map((x) => `${x}${char}`);
+    let lineNumbers = [];
 
-        // If char is same as starting character of a number we create a new entry in the possibleCharNumbers array
-        // (This is done after we have added the char to all existing possibleCharNumbers entries
-        if (startingChars.includes(char)) possibleCharNumbers.push(char);
+    // Add the letter numbers
+    for (const number in numbersAsLetters) {
+      let result = line.matchAll(number);
 
-        // Check if any of the entries in possibleCharNumbers is a complete number. If true, add it to the lineNumber
-        let indexesToRemove = [];
-        for (let i = 0; i < possibleCharNumbers.length; i++) {
-          if (numbersAsLetters.includes(possibleCharNumbers[i])) {
-            lineNumber =
-              lineNumber + numbersAsLetters.indexOf(possibleCharNumbers[i]);
-            indexesToRemove.push(i);
-          }
-        }
-
-        //.. and remove them from the list
-        indexesToRemove.map((x) => possibleCharNumbers.splice(x, 1));
+      for (const match of result) {
+        // Save the number and the position
+        lineNumbers.push({
+          match: Number(numbersAsLetters[match[0]]),
+          index: match.index,
+        });
       }
-    });
-    // Add the line number to the numbers array
-    //console.log("lineNumber: " + lineNumber);
-    numbers.push(lineNumber);
+    }
+
+    // add the digit numbers
+    for (const number of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+      let result = line.matchAll(number);
+
+      for (const match of result) {
+        // Save the number and the position
+        lineNumbers.push({ match: Number(match[0]), index: match.index });
+      }
+    }
+
+    // Sort the numbers based on the position
+    let lineResult = lineNumbers
+      .sort((a, b) => {
+        return a.index - b.index;
+      })
+      .map((x) => x.match); // and get the fucking value
+
+    let currentLineNumber = `${lineResult[0]}${
+      lineResult[lineResult.length - 1]
+    }`;
+
+    numbers.push(currentLineNumber);
   });
 
-  const result = numbers
-    .map((x) => {
-      let res = `${x[0]}${x[x.length - 1]}`;
-      return res;
-    })
-    .reduce((a, b) => Number(a) + Number(b), 0);
+  const result = numbers.reduce((a, b) => Number(a) + Number(b), 0);
 
   return result;
 };
