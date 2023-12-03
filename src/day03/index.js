@@ -67,8 +67,6 @@ const checkPositionsForAnySymbol = (
 // 3. Vi ska ta numrena som är närliggande till de astrixer som har count = 2, och summera numrena.
 //           x* y*
 // Exempel: {x: 4, y: 5, numbers: [127]}
-var testAsterixPos = [{ x: 4, y: 5, numbers: [127] }];
-
 const checkPositionsForAsterix = (
   currentNumber,
   prevLine,
@@ -79,15 +77,13 @@ const checkPositionsForAsterix = (
   asterixPostions,
 ) => {
   for (const position of positions) {
+    // Check previous line
     if (prevLine != "") {
       let prevLineMatch = prevLine[position].match(/\*/);
       if (prevLineMatch != null) {
         let exists = false;
         for (const asterix of asterixPostions) {
-          if (
-            Number(asterix.x) == Number(position) &&
-            Number(asterix.y) == Number(lineNumber) - 1
-          ) {
+          if (asterix.x == position && asterix.y == lineNumber - 1) {
             asterix.numbers.push(currentNumber);
             exists = true;
           }
@@ -102,15 +98,13 @@ const checkPositionsForAsterix = (
       }
     }
 
+    // Check next line
     if (nextLine != "") {
       let nextLineMatch = nextLine[position].match(/\*/);
       if (nextLineMatch != null) {
         let exists = false;
         for (const asterix of asterixPostions) {
-          if (
-            Number(asterix.x) == Number(position) &&
-            Number(asterix.y) == Number(lineNumber) + 1
-          ) {
+          if (asterix.x == position && asterix.y == lineNumber + 1) {
             asterix.numbers.push(currentNumber);
             exists = true;
           }
@@ -125,14 +119,12 @@ const checkPositionsForAsterix = (
       }
     }
 
+    // Check current line
     let currLineMatch = currLine[position].match(/\*/);
     if (currLineMatch != null) {
       let exists = false;
       for (const asterix of asterixPostions) {
-        if (
-          Number(asterix.x) == Number(position) &&
-          Number(asterix.y) == Number(lineNumber)
-        ) {
+        if (asterix.x == position && asterix.y == lineNumber) {
           asterix.numbers.push(currentNumber);
           exists = true;
         }
@@ -197,12 +189,12 @@ const part2 = (rawInput) => {
       );
 
       checkPositionsForAsterix(
-        Number(match[0]),
+        match[0],
         prevLine,
         currLine,
         nextLine,
         positions,
-        Number(i),
+        i,
         asterixPostions,
       );
     }
@@ -210,7 +202,7 @@ const part2 = (rawInput) => {
 
   for (const asterix of asterixPostions) {
     if (asterix.numbers.length == 2) {
-      result = result + Number(asterix.numbers[0]) * Number(asterix.numbers[1]);
+      result = result + asterix.numbers[0] * asterix.numbers[1];
     }
   }
 
