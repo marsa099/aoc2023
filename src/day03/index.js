@@ -25,17 +25,16 @@ const part1 = (rawInput) => {
     let matches = [...currLine.matchAll(/\d+/g)];
 
     for (const match of matches) {
+      console.log(match);
       // Get the positions we need to check
-      //console.log(match);
       let positions = getPositions(
         match.index,
         match[0].length,
         currLine.length,
       );
-      //console.log(positions);
+
       if (checkPositionsForAnySymbol(prevLine, currLine, nextLine, positions)) {
         result = result + Number(match[0]);
-        //console.log("match: " + match[0] + " " + result);
       }
     }
   }
