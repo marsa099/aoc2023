@@ -78,57 +78,21 @@ const checkPositionsForAsterix = (
   lineNumber,
   asterixPostions,
 ) => {
-  console.log(
-    `checkPositionsForAsterix ${currentNumber} ${lineNumber}. Positions: ${positions}`,
-  );
   for (const position of positions) {
-    console.log("test 1");
     if (prevLine != "") {
-      console.log("test 1.1");
       let prevLineMatch = prevLine[position].match(/\*/);
       if (prevLineMatch != null) {
-        console.log(
-          `test 1.2 - ${prevLineMatch} - ${position} - ${lineNumber}`,
-        );
-        console.log(
-          "PrevLineMatch: " +
-            prevLineMatch +
-            " x: " +
-            position +
-            " y: " +
-            (lineNumber - 1),
-        );
-        console.log("test 1.3");
         let exists = false;
         for (const asterix of asterixPostions) {
-          console.log(
-            `Asterix.x = ${asterix.x} (${position}) Asterix.y = ${asterix.y} (${
-              lineNumber - 1
-            })`,
-          );
           if (
             Number(asterix.x) == Number(position) &&
             Number(asterix.y) == Number(lineNumber) - 1
           ) {
-            console.log("Existing match");
             asterix.numbers.push(currentNumber);
-            console.log(
-              `Pushing {x: ${asterix.x}, y: ${asterix.y}, numbers: [${asterix.numbers}]}`,
-            );
             exists = true;
           }
         }
         if (!exists) {
-          console.log(
-            "Pushing {x: " +
-              position +
-              ", y: " +
-              lineNumber -
-              1 +
-              ", numbers: [" +
-              currentNumber +
-              "]}",
-          );
           asterixPostions.push({
             x: position,
             y: lineNumber - 1,
@@ -137,41 +101,21 @@ const checkPositionsForAsterix = (
         }
       }
     }
-    console.log("test 2");
+
     if (nextLine != "") {
       let nextLineMatch = nextLine[position].match(/\*/);
       if (nextLineMatch != null) {
-        console.log(
-          "NextLineMatch: " +
-            nextLineMatch +
-            " x: " +
-            position +
-            " y: " +
-            `${lineNumber + 1}`,
-        );
         let exists = false;
         for (const asterix of asterixPostions) {
-          console.log(asterix.x);
           if (
             Number(asterix.x) == Number(position) &&
             Number(asterix.y) == Number(lineNumber) + 1
           ) {
-            console.log("Existing match");
             asterix.numbers.push(currentNumber);
             exists = true;
           }
         }
         if (!exists) {
-          console.log(
-            "Pushing {x: " +
-              position +
-              ", y: " +
-              lineNumber +
-              1 +
-              ", numbers: [" +
-              currentNumber +
-              "]}",
-          );
           asterixPostions.push({
             x: position,
             y: lineNumber + 1,
@@ -180,38 +124,20 @@ const checkPositionsForAsterix = (
         }
       }
     }
-    // console.log("test 3");
+
     let currLineMatch = currLine[position].match(/\*/);
     if (currLineMatch != null) {
-      console.log(
-        "CurrLineMatch: " +
-          currLineMatch +
-          " x: " +
-          position +
-          " y: " +
-          lineNumber,
-      );
       let exists = false;
       for (const asterix of asterixPostions) {
         if (
           Number(asterix.x) == Number(position) &&
           Number(asterix.y) == Number(lineNumber)
         ) {
-          console.log("Existing match");
           asterix.numbers.push(currentNumber);
           exists = true;
         }
       }
       if (!exists) {
-        console.log(
-          "Pushing {x: " +
-            position +
-            ", y: " +
-            lineNumber +
-            ", numbers: [" +
-            currentNumber +
-            "]}",
-        );
         asterixPostions.push({
           x: position,
           y: lineNumber,
@@ -264,13 +190,12 @@ const part2 = (rawInput) => {
 
     for (const match of matches) {
       // Get the positions we need to check
-      //console.log(match);
       let positions = getPositions(
         match.index,
         match[0].length,
         currLine.length,
       );
-      //console.log(positions);
+
       checkPositionsForAsterix(
         Number(match[0]),
         prevLine,
@@ -284,7 +209,6 @@ const part2 = (rawInput) => {
   }
 
   for (const asterix of asterixPostions) {
-    console.log(asterix);
     if (asterix.numbers.length == 2) {
       result = result + Number(asterix.numbers[0]) * Number(asterix.numbers[1]);
     }
