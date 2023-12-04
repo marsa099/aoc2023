@@ -8,20 +8,11 @@ const part1 = (rawInput) => {
   let totalScore = 0;
 
   for (const line of input) {
-    console.log(line);
-    //console.log(line.match(/Card\s+(\d+):/)[1]);
-    let cardNo = line.match(/Card\s+(\d+):/)[1];
     let winningNumbers = [...line.split(': ')[1].split('|')[0].matchAll(/\d+/g)].map(x => Number(x[0]))
     let myNumbers = [...line.split(': ')[1].split('|')[1].matchAll(/\d+/g)].map(x => Number(x[0]));
-
-    console.log(`${winningNumbers} | ${myNumbers}`);
     
     let cardScore = 0;
-    for(let num of myNumbers) {
-      if (winningNumbers.includes(num))
-        cardScore = (cardScore == 0 ? 1 : cardScore * 2)
-    }
-    console.log(cardScore);
+    myNumbers.forEach(num => (winningNumbers.includes(num) ? (cardScore === 0 ? cardScore = 1 : cardScore = cardScore * 2) : null));
     totalScore += cardScore
   }
 
