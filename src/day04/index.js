@@ -22,7 +22,6 @@ const part1 = (rawInput) => {
   return totalScore;
 };
 var hashMap = {};
-var myValue = 0;
 
 const part2 = (rawInput) => {
   const input = parseInput(rawInput);
@@ -30,40 +29,29 @@ const part2 = (rawInput) => {
   for (let row = 0; row < input.length; row++)
   {
       let card = row + 1;
-      console.log(`Preparing row ${row} (card ${card})`);
+      //console.log(`Preparing row ${row} (card ${card})`);
       // prettier-ignore
       let winningNumbers = [...input[row].split(": ")[1].split("|")[0].matchAll(/\d+/g)].map((x) => Number(x[0]));
       // prettier-ignore
       let myNumbers = [...input[row].split(": ")[1].split("|")[1].matchAll(/\d+/g)].map((x) => Number(x[0]));
 
-      // Get the number of winning numbers in my numbers
-      const winCount = myNumbers.filter(num => winningNumbers.includes(num)).length;
-
-      let references = [];
-
-      for (let num = 0; num < winCount; num++)
-      {
-        references.push(num+1+card);
-      }
-
-      //console.log(references);
-      // Store row number + referenced cards into hash map
-      hashMap[card] = references;
+      // Get the number of winning numbers in my numbers and store in the hashMap
+      hashMap[card] = myNumbers.filter(num => winningNumbers.includes(num)).length;
   }
-  for (let row = 0; row < input.length; row++)
-  {
-    getValue(row+1);
-  }
+  let total = 0;
+  input.forEach((val, index) => total += getValue(index))
 
-  return myValue;
+  return total;
 };
 
 const getValue = (value) => {
-  myValue += 1;
-  for(let val of hashMap[value])
+  let total = 1;
+
+  for(let i = 0; i < hashMap[value]; i++)
   {
-    getValue(val);
+    total += getValue(value+i+1);
   }
+  return total;
 }
 
 
