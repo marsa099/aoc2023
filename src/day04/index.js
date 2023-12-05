@@ -32,6 +32,8 @@ const part2 = (rawInput) => {
   // e.g (for Card 1 with 4 correct numbers): 1: {19, 101, 38, 4}
   // store object in hash map
   
+  // imaginaryStartCardRefs =  
+
   for (let row = 0; row < input.length; row++)
   {
       let card = row + 1;
@@ -51,22 +53,25 @@ const part2 = (rawInput) => {
         references.push(num+1+card);
       }
 
-      console.log(references);
+      //console.log(references);
       // Store row number + referenced cards into hash map
       hashMap[card] = references;
   }
-  getValue(1);
+  for (let row = 0; row < input.length; row++)
+  {
+    getValue(row+1);
+  }
 
-  return myValue;
+  return input.length+myValue;
 };
 
 const getValue = (value) => {
   myValue += hashMap[value].length;
+  console.log(hashMap[value].length);
   // console.log(hashMap[value]);
   // console.log(hashMap[value].length);
   for(let val of hashMap[value])
   {
-    console.log(val);
     getValue(val);
   }
 }
@@ -102,5 +107,5 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`,
     solution: part2,
   },
   trimTestInputs: true,
-  onlyTests: true,
+  onlyTests: false,
 });
