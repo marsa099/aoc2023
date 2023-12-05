@@ -21,35 +21,56 @@ const part1 = (rawInput) => {
 
   return totalScore;
 };
+var hashMap = {};
+var myValue = 0;
 
 const part2 = (rawInput) => {
   const input = parseInput(rawInput);
 
-  return input.length+magic(0, input, input.length, 1);
-};
+  // Parse each line into an object
+  // Consisting of references to other cards for each card
+  // e.g (for Card 1 with 4 correct numbers): 1: {19, 101, 38, 4}
+  // store object in hash map
+  
+  for (let row = 0; row < input.length; row++)
+  {
+      let card = row + 1;
+      console.log(`Preparing row ${row} (card ${card})`);
+      // prettier-ignore
+      let winningNumbers = [...input[row].split(": ")[1].split("|")[0].matchAll(/\d+/g)].map((x) => Number(x[0]));
+      // prettier-ignore
+      let myNumbers = [...input[row].split(": ")[1].split("|")[1].matchAll(/\d+/g)].map((x) => Number(x[0]));
 
-const magic = (startRow, input, noCardsToParse, iteration) => {
-  let wonCards = 0;
-  for (let row = startRow; row < (startRow + noCardsToParse); row++) {
-    console.log(`Card ${row+1} (${iteration}): ${input[row]} startRow: ${startRow}, noCardsToParse: ${noCardsToParse}`);
-    let line = input[row];
-    // prettier-ignore
-    let winningNumbers = [...line.split(": ")[1].split("|")[0].matchAll(/\d+/g)].map((x) => Number(x[0]));
-    // prettier-ignore
-    let myNumbers = [...line.split(": ")[1].split("|")[1].matchAll(/\d+/g)].map((x) => Number(x[0]));
+      // Get the number of winning numbers in my numbers
+      const winCount = myNumbers.filter(num => winningNumbers.includes(num)).length;
 
-    // prettier-ignore
-    let wonCardsthisRound = myNumbers.filter(x => winningNumbers.includes(x)).length;
-    //console.log(`Round ${row}: ${wonCardsthisRound}`)
+      let references = [];
 
-    if (wonCardsthisRound != 0) {
-      wonCards += wonCardsthisRound;
-      console.log(wonCardsthisRound);
-      wonCards += magic(row + 1, input, wonCardsthisRound, iteration + 1);
-    }
+      for (let num = 0; num < winCount; num++)
+      {
+        references.push(num+1+card);
+      }
+
+      console.log(references);
+      // Store row number + referenced cards into hash map
+      hashMap[card] = references;
   }
-  return wonCards;
+  getValue(1);
+
+  return myValue;
 };
+
+const getValue = (value) => {
+  myValue += hashMap[value].length;
+  // console.log(hashMap[value]);
+  // console.log(hashMap[value].length);
+  for(let val of hashMap[value])
+  {
+    console.log(val);
+    getValue(val);
+  }
+}
+
 
 run({
   part1: {
@@ -81,5 +102,5 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11`,
     solution: part2,
   },
   trimTestInputs: true,
-  onlyTests: false,
+  onlyTests: true,
 });
