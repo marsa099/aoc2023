@@ -27,13 +27,6 @@ var myValue = 0;
 const part2 = (rawInput) => {
   const input = parseInput(rawInput);
 
-  // Parse each line into an object
-  // Consisting of references to other cards for each card
-  // e.g (for Card 1 with 4 correct numbers): 1: {19, 101, 38, 4}
-  // store object in hash map
-  
-  // imaginaryStartCardRefs =  
-
   for (let row = 0; row < input.length; row++)
   {
       let card = row + 1;
@@ -62,14 +55,11 @@ const part2 = (rawInput) => {
     getValue(row+1);
   }
 
-  return input.length+myValue;
+  return myValue;
 };
 
 const getValue = (value) => {
-  myValue += hashMap[value].length;
-  console.log(hashMap[value].length);
-  // console.log(hashMap[value]);
-  // console.log(hashMap[value].length);
+  myValue += 1;
   for(let val of hashMap[value])
   {
     getValue(val);
